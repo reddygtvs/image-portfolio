@@ -21,3 +21,16 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# build output
+/dist
+
+# tool specific
+/.claude
+
+# generated files
+/scripts/image_dimensions.json
+/src/data/generated-images.ts
+
+# local assets
+/public/images/
