@@ -23,7 +23,7 @@ export const generatedImages: ImageData[] = [
 
   dimensionsData.forEach((imageData, index) => {
     const id = index + 1;
-    const url = `/images/${imageData.filename}`;
+    const url = `/images/compressed/${imageData.filename}`;
     const width = imageData.width;
     const height = imageData.height;
     
