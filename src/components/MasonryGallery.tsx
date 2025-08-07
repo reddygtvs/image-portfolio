@@ -70,7 +70,7 @@ export default function MasonryGallery() {
   }));
 
   return (
-    <div className="min-h-screen bg-white p-3">
+    <div className="p-3">
       <PhotoAlbum 
         layout="masonry"
         photos={photos}

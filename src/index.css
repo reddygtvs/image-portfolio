@@ -1,9 +1,28 @@
 @import 'tailwindcss';
 @import 'react-photo-album/masonry.css';
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 /* Ensure images don't have any default spacing */
 img {
   display: block;
   max-width: 100%;
   height: auto;
+}
+
+/* Original bounce-smooth animation from homepage-new smiley */
+@keyframes bounce-smooth {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0px);
+  }
+  40% {
+    transform: translateY(-8px);
+  }
+  60% {
+    transform: translateY(-4px);
+  }
+}
+
+.bounce-favicon {
+  animation: bounce-smooth 2s ease-in-out 2;
+  display: inline-block;
 }
