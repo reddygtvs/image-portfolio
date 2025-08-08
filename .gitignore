@@ -33,6 +33,6 @@ yarn-error.log*
 
 # local assets
 /public/images/
-/public/compressed/
+#/public/compressed/
 BUILD_DEBUG_INSIGHTS.md
 scripts/test_compression.py
