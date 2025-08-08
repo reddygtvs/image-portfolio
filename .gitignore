@@ -30,7 +30,6 @@ yarn-error.log*
 
 # generated files
 /scripts/image_dimensions.json
-/src/data/generated-images.ts
 
 # local assets
 /public/images/
