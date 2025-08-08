@@ -12,13 +12,14 @@ interface ColumnState {
   images: MasonryImage[];
 }
 
+const INITIAL_LOAD_COUNT = 15;
+const BATCH_SIZE = 15;
+
 export default function MasonryGallery() {
   const [visibleImages, setVisibleImages] = useState<ImageData[]>([]);
   const [loadedImages, setLoadedImages] = useState(new Set<number>());
   const [columns, setColumns] = useState<ColumnState[]>([]);
   const [columnCount, setColumnCount] = useState(4);
-  const observerRef = useRef<IntersectionObserver>();
-  const sentinelRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Determine column count based on container width
@@ -49,17 +50,15 @@ export default function MasonryGallery() {
       const isHorizontal = image.width > image.height;
       const aspectRatio = image.width / image.height;
       
-      // Phase 1: Smart initial placement (first 12 images for 6 columns)
+      // Phase 1: Smart initial placement
       if (index < Math.max(8, columnCount * 2)) {
         const targetColumn = index % columnCount;
         
-        // Apply cropping to alternating columns for offset (1, 3, 5 for 6-col layout)
-        // Skip cropping for horizontal images or extreme aspect ratios
         const shouldCrop = (targetColumn % 2 === 1) && 
                           !isHorizontal && 
                           aspectRatio < 2 && aspectRatio > 0.5;
         
-        const cropPercentage = shouldCrop ? 0.12 : 0; // 12% crop
+        const cropPercentage = shouldCrop ? 0.12 : 0;
         
         const masonryImage: MasonryImage = {
           ...image,
@@ -68,7 +67,6 @@ export default function MasonryGallery() {
           columnIndex: targetColumn
         };
         
-        // Calculate display height (accounting for crop)
         const displayHeight = shouldCrop ? image.height * (1 - cropPercentage) : image.height;
         
         newColumns[targetColumn].images.push(masonryImage);
@@ -95,62 +93,37 @@ export default function MasonryGallery() {
     return newColumns;
   }, [columnCount]);
 
-  // Initial load: 30 images with smart layout
+  // Load images in batches
   useEffect(() => {
     if (columnCount > 0) {
-      const initialImages = localImages.slice(0, 30);
+      // Initial load
+      const initialImages = localImages.slice(0, INITIAL_LOAD_COUNT);
       setVisibleImages(initialImages);
       setColumns(createSmartLayout(initialImages));
+
+      // Sequentially load the rest
+      let currentIndex = INITIAL_LOAD_COUNT;
+      const intervalId = setInterval(() => {
+        if (currentIndex >= localImages.length) {
+          clearInterval(intervalId);
+          return;
+        }
+        const nextBatch = localImages.slice(0, currentIndex + BATCH_SIZE);
+        setVisibleImages(nextBatch);
+        setColumns(createSmartLayout(nextBatch));
+        currentIndex += BATCH_SIZE;
+      }, 100); // 100ms delay between batches
+
+      return () => clearInterval(intervalId);
     }
   }, [columnCount, createSmartLayout]);
-
-  // Load next 70 images when user scrolls
-  useEffect(() => {
-    if (visibleImages.length === 30) {
-      const timer = setTimeout(() => {
-        const newImages = localImages.slice(0, 100);
-        setVisibleImages(newImages);
-        setColumns(createSmartLayout(newImages));
-      }, 100);
-      return () => clearTimeout(timer);
-    }
-  }, [visibleImages, createSmartLayout]);
-
-  // Load remaining images on scroll
-  const loadMoreImages = useCallback(() => {
-    if (visibleImages.length === 100 && visibleImages.length < localImages.length) {
-      setVisibleImages(localImages);
-      setColumns(createSmartLayout(localImages));
-    }
-  }, [visibleImages, createSmartLayout]);
-
-  // Intersection Observer for lazy loading remaining images
-  useEffect(() => {
-    if (observerRef.current) observerRef.current.disconnect();
-
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          loadMoreImages();
-        }
-      },
-      { rootMargin: '200px' }
-    );
-
-    if (sentinelRef.current) {
-      observerRef.current.observe(sentinelRef.current);
-    }
-
-    return () => observerRef.current?.disconnect();
-  }, [loadMoreImages]);
 
   const handleImageLoad = (id: number) => {
     setLoadedImages(prev => new Set(prev).add(id));
   };
 
-  // Calculate column width as percentage
   const columnWidthPercent = 100 / columnCount;
-  const spacing = columnCount === 3 ? 12 : 20; // 12px for mobile (3 columns), 20px for tablet/desktop
+  const spacing = columnCount === 3 ? 12 : 20;
 
   return (
     <div className={`${columnCount === 3 ? 'p-3' : 'p-5'}`} ref={containerRef}>
@@ -186,7 +159,7 @@ export default function MasonryGallery() {
                     src={image.url}
                     alt=""
                     className="w-full h-full"
-                    loading={image.id <= 30 ? "eager" : "lazy"}
+                    loading={image.id <= INITIAL_LOAD_COUNT ? "eager" : "lazy"}
                     onLoad={() => handleImageLoad(image.id)}
                     style={{
                       opacity: loadedImages.has(image.id) ? 1 : 0,
@@ -201,10 +174,6 @@ export default function MasonryGallery() {
           </div>
         ))}
       </div>
-      
-      {visibleImages.length === 100 && visibleImages.length < localImages.length && (
-        <div ref={sentinelRef} className="h-1" />
-      )}
     </div>
   );
 }
