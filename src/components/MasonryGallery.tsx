@@ -152,7 +152,7 @@ export default function MasonryGallery() {
                   className="relative overflow-hidden rounded"
                   style={{
                     aspectRatio: aspectRatio.toString(),
-                    backgroundColor: loadedImages.has(image.id) ? 'transparent' : '#f3f4f6',
+                    backgroundColor: loadedImages.has(image.id) ? 'transparent' : '#000000',
                   }}
                 >
                   <img
@@ -163,7 +163,7 @@ export default function MasonryGallery() {
                     onLoad={() => handleImageLoad(image.id)}
                     style={{
                       opacity: loadedImages.has(image.id) ? 1 : 0,
-                      transition: 'opacity 0.3s ease-in-out',
+                      transition: 'opacity 0.5s ease-in-out',
                       objectFit: 'cover',
                       objectPosition: image.shouldCrop ? 'center center' : 'center'
                     }}
