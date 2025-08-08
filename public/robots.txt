@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://tushxrt.com/sitemap.xml

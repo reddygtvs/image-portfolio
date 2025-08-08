@@ -8,8 +8,8 @@ from concurrent.futures import ProcessPoolExecutor
 from PIL import Image, ImageOps
 
 # Compression settings
-MAX_DIMENSION = 1200  # Maximum width or height
-WEBP_QUALITY = 65     # WebP compression quality (1-100) - aggressive for web delivery
+MAX_DIMENSION = 700   # Maximum width or height - optimized for desktop viewing with better sharpness
+WEBP_QUALITY = 70     # WebP compression quality (1-100) - balanced quality/size
 NUM_WORKERS = min(8, multiprocessing.cpu_count())  # Parallel processing workers
 
 def clean_old_data(script_dir):
