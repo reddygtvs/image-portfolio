@@ -2,6 +2,11 @@
 @import 'react-photo-album/masonry.css';
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
+/* Fix overscroll background */
+html, body {
+  background-color: black;
+}
+
 /* Ensure images don't have any default spacing */
 img {
   display: block;

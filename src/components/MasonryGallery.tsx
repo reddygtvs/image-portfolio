@@ -119,7 +119,7 @@ export default function MasonryGallery() {
   const spacing = columnCount === 3 ? 12 : 20;
 
   return (
-    <div className={`${columnCount === 3 ? 'p-3' : 'p-5'}`} ref={containerRef}>
+    <div className={`${columnCount === 3 ? 'px-3 pb-3' : 'px-5 pb-5'}`} ref={containerRef}>
       <div className={`flex ${columnCount === 3 ? 'gap-3' : 'gap-5'}`} style={{ alignItems: 'flex-start' }}>
         {columns.map((column, columnIndex) => (
           <div
