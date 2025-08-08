@@ -26,9 +26,9 @@ export default function MasonryGallery() {
     const updateColumnCount = () => {
       if (!containerRef.current) return;
       const width = containerRef.current.offsetWidth;
-      if (width < 768) setColumnCount(2); // Mobile - 2 columns
-      else if (width < 1024) setColumnCount(3); // Tablet - 3 columns
-      else setColumnCount(4); // Desktop - 4 columns
+      if (width < 768) setColumnCount(3); // Mobile - 3 columns
+      else if (width < 1024) setColumnCount(4); // Tablet - 4 columns
+      else setColumnCount(5); // Desktop - 5 columns
     };
 
     updateColumnCount();
@@ -49,13 +49,13 @@ export default function MasonryGallery() {
       const isHorizontal = image.width > image.height;
       const aspectRatio = image.width / image.height;
       
-      // Phase 1: Smart initial placement (first 8 images)
-      if (index < 8) {
+      // Phase 1: Smart initial placement (first 12 images for 6 columns)
+      if (index < Math.max(8, columnCount * 2)) {
         const targetColumn = index % columnCount;
         
-        // Apply cropping to columns 1 and 3 (0-indexed) for offset
+        // Apply cropping to alternating columns for offset (1, 3, 5 for 6-col layout)
         // Skip cropping for horizontal images or extreme aspect ratios
-        const shouldCrop = (targetColumn === 1 || targetColumn === 3) && 
+        const shouldCrop = (targetColumn % 2 === 1) && 
                           !isHorizontal && 
                           aspectRatio < 2 && aspectRatio > 0.5;
         
@@ -150,11 +150,11 @@ export default function MasonryGallery() {
 
   // Calculate column width as percentage
   const columnWidthPercent = 100 / columnCount;
-  const spacing = 12; // px
+  const spacing = columnCount === 3 ? 12 : 20; // 12px for mobile (3 columns), 20px for tablet/desktop
 
   return (
-    <div className="p-3" ref={containerRef}>
-      <div className="flex gap-3" style={{ alignItems: 'flex-start' }}>
+    <div className={`${columnCount === 3 ? 'p-3' : 'p-5'}`} ref={containerRef}>
+      <div className={`flex ${columnCount === 3 ? 'gap-3' : 'gap-5'}`} style={{ alignItems: 'flex-start' }}>
         {columns.map((column, columnIndex) => (
           <div
             key={columnIndex}
