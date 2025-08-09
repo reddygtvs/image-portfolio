@@ -25,7 +25,8 @@ function App() {
         <h1
           className={`${
             isMobile ? "text-lg" : "text-2xl"
-          } font-inter font-bold text-white uppercase tracking-widest m-0`}
+          } font-inter font-bold text-white uppercase tracking-widest m-0 text-glow-white cursor-pointer hover:text-spotify transition-colors duration-200`}
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         >
           TUSHAR REDDY<span className="bounce-favicon">.</span>
         </h1>
