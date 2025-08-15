@@ -1,70 +1,79 @@
-# Getting Started with Create React App
+# Photography Portfolio
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A responsive photography portfolio website built with React, TypeScript, and Vite. Features a masonry grid layout with lazy loading and WebP image optimization.
 
-## Available Scripts
+## Tech Stack
 
-In the project directory, you can run:
+- React 18 + TypeScript
+- Vite (build tool)
+- Tailwind CSS
+- Python scripts for image processing
 
-### `npm start`
+## Development
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Install dependencies:
+```bash
+npm install
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Start development server:
+```bash
+npm run dev
+```
 
-### `npm test`
+Build for production:
+```bash
+npm run build
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Adding Images
 
-### `npm run build`
+1. Add images to `public/images/` directory
+2. Run the image processing scripts:
+   ```bash
+   python3 scripts/get_image_dimensions.py
+   node scripts/generate-images.js
+   ```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+The scripts will:
+- Extract image dimensions and generate metadata
+- Create TypeScript definitions for the images
+- Images are automatically included in the gallery
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Image Optimization
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+The project includes scripts to compress images to WebP format:
+```bash
+python3 scripts/test_compression.py
+```
 
-### `npm run eject`
+This creates optimized versions in `public/compressed/` directory.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Project Structure
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```
+src/
+├── components/MasonryGallery.tsx   # Main gallery component
+├── data/
+│   ├── images.ts                   # Image interfaces and exports
+│   └── generated-images.ts         # Auto-generated image data
+└── App.tsx                         # Main app component
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+scripts/
+├── get_image_dimensions.py         # Extract image metadata
+├── generate-images.js              # Generate TypeScript image data
+└── test_compression.py             # WebP compression utility
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Features
 
-## Learn More
+- Responsive masonry layout (3-5 columns based on screen size)
+- Progressive image loading with smooth animations
+- Lazy loading for performance
+- Mobile-optimized interface
+- WebP image compression
+- TypeScript for type safety
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Deployment
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+The built files in `dist/` can be deployed to any static hosting service (Netlify, Vercel, GitHub Pages, etc.).
